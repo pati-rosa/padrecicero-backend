@@ -2,6 +2,8 @@ const express = require('express');
 
 const Product = require('../models/product');
 
+const Sale = require('../models/sale');
+
 const router = express.Router();
 
 router.post('/register', async (req,res) => {
@@ -44,5 +46,21 @@ router.get('/listproducts/', async (req,res) => {
 
     }
 });
+
+// router.post('/registersale/:id', async(req,res) => {
+
+//     try{
+//         const product = await Product.findOne({ 
+//                 where: {
+//                     id: req.params.id,
+//                 }  
+//             }
+//         )
+//     }
+//     catch{
+//         console.log(err);
+//         return res.status(400).send({error: 'Add product to sale products failed'});
+//     }
+// });
 
 module.exports = app => app.use('/productmanagement', router);
