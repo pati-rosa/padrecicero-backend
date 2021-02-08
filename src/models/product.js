@@ -1,9 +1,11 @@
 const mongoose = require('../database');
 
 const ProductSchema = new mongoose.Schema({
-    category: {
-        type: String,
-        required: true,
+    _id: mongoose.Schema.Types.ObjectId,
+    category: { 
+        type: mongoose.Schema.Types.ObjectId, 
+        ref: 'Category', 
+        required : true
     },
     name:{
         type: 'String',

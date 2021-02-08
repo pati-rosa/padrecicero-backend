@@ -6,6 +6,10 @@ const SaleSchema = new mongoose.Schema({
         unique:true,
         required: true,
     },
+    quantidade:{
+        type: Number,
+        required: true
+    },
     createdAt: {
         type: Date,
         default: Date.now,
