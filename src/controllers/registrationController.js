@@ -21,9 +21,21 @@ router.post('/register', async (req,res) => {
     }
 });
 
-router.get('/listproducts/drinks', async (req,res) => {
+router.get('/listproducts/:rcategory', async (req,res) => {
     try {
-        const products = await Product.find({ category: 'bebidas' });
+        const products = await Product.find({ category: req.params.rcategory });
+        return res.send({ products });
+
+    }   catch(err) {
+        console.log(err);
+        return res.status(400).send({error: 'Consult of products failed'});
+
+    }
+});
+
+router.get('/listproducts/', async (req,res) => {
+    try {
+        const products = await Product.find();
         return res.send({ products });
 
     }   catch(err) {
