@@ -11,56 +11,68 @@ const router = express.Router();
 /*
     Category Routes
 */
-router.post('/registercategory', async (req,res) => {
-    const { name } = req.body;
+router.post('/registercategory', async (req, res) => {
 
     try {
+        const { name } = req.body;
+
         if (await Category.findOne({ name }))
             return res.status(400).send({ error: 'Category already exists' });
-        const category = await Category.create(req.body);
+
+        const category = await Category.create({ name });
+
         return res.send({ category });
 
-    }   catch(err) {
+    }
+    catch (err) {
         console.log(err);
-        return res.status(400).send({error: 'Register category failed'});
+        return res.status(400).send({ error: 'Register category failed' });
 
     }
 });
 
 
-router.get('/listcategories/:categoryId', async (req,res) => {
+router.get('/listcategories/:categoryId', async (req, res) => {
     try {
-        const category = await Category.findById(req.params.categoryId);
+        const category = await Category.findById(req.params.categoryId).populate('products');
         return res.send({ category });
 
-    }   catch(err) {
+    } catch (err) {
         console.log(err);
-        return res.status(400).send({error: 'Consult of products failed'});
+        return res.status(400).send({ error: 'Consult of products failed' });
+
+    }'602182cc1aea94080169645c'
+    try {
+        const categories = await Category.find().populate('products');
+        return res.send({ categories });
+
+    } catch (err) {
+        console.log(err);
+        return res.status(400).send({ error: 'Consult of products failed' });
 
     }
 });
 
-router.get('/listcategories', async (req,res) => {
+router.get('/listcategories', async (req, res) => {
     try {
         const categories = await Category.find();
         return res.send({ categories });
 
-    }   catch(err) {
+    } catch (err) {
         console.log(err);
-        return res.status(400).send({error: 'Consult of products failed'});
+        return res.status(400).send({ error: 'Consult of categories failed' });
 
     }
 });
 
-
-router.delete('/deletecategory/:categoryId', async (req,res) => {
+router.delete('/deletecategory/:categoryId', async (req, res) => {
     try {
         await Category.findByIdAndRemove(req.params.categoryId);
         return res.send();
 
-    }   catch(err) {
+    } catch (err) {
         console.log(err);
-        return res.status(400).send({error: 'Error deleting category'});
+        return res.status(400).send({ error: 'Error deleting category' });
 
     }
 });
@@ -68,43 +80,51 @@ router.delete('/deletecategory/:categoryId', async (req,res) => {
     Products Routes
 */
 
-router.post('/registerproduct', async (req,res) => {
-    const { name } = req.body;
+router.post('/registerproduct', async (req, res) => {
+    const { name, category, description, price } = req.body;
 
     try {
-
-        if (await Product.findOne({ name }))
+        if (await Product.findOne({ name })) {
             return res.status(400).send({ error: 'Product already exists' });
-        const product = await Product.create(req.body);
+        }
+
+        const product = await Product.create({ name, category, description, price });
+
+        await Category.findByIdAndUpdate(category, {
+            $push: {
+                products: product._id
+            }
+        })
+
         return res.send({ product });
 
-    }   catch(err) {
+    } catch (err) {
         console.log(err);
-        return res.status(400).send({error: 'Register product failed'});
+        return res.status(400).send({ error: 'Register product failed' });
 
     }
 });
 
-router.get('/listproducts/:rcategory', async (req,res) => {
+router.get('/listproducts/:rcategory', async (req, res) => {
     try {
         const products = await Product.find({ category: req.params.rcategory });
         return res.send({ products });
 
-    }   catch(err) {
+    } catch (err) {
         console.log(err);
-        return res.status(400).send({error: 'Consult of products failed'});
+        return res.status(400).send({ error: 'Consult of products failed' });
 
     }
 });
 
-router.get('/listproducts', async (req,res) => {
+router.get('/listproducts', async (req, res) => {
     try {
         const products = await Product.find();
         return res.send({ products });
 
-    }   catch(err) {
+    } catch (err) {
         console.log(err);
-        return res.status(400).send({error: 'Consult of products failed'});
+        return res.status(400).send({ error: 'Consult of products failed' });
 
     }
 });

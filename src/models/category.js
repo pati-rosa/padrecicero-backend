@@ -1,9 +1,8 @@
 const mongoose = require('../database');
-
 const CategorySchema = new mongoose.Schema({
     name:{
-        type: 'String',
-        unique:true,
+        type: String,
+        unique: true,
         required: true,
     },
     createdAt: {
@@ -17,6 +16,6 @@ const CategorySchema = new mongoose.Schema({
     
 });
 
-const Category = mongoose.model('ProductCategory', CategorySchema);
+const Category = mongoose.model('Category', CategorySchema);
 
 module.exports = Category;

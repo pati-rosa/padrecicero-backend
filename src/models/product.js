@@ -1,14 +1,12 @@
 const mongoose = require('../database');
-
 const ProductSchema = new mongoose.Schema({
-    _id: mongoose.Schema.Types.ObjectId,
     category: { 
         type: mongoose.Schema.Types.ObjectId, 
         ref: 'Category', 
         required : true
     },
     name:{
-        type: 'String',
+        type: String,
         unique:true,
         required: true,
     },
