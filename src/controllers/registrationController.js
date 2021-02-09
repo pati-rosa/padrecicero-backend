@@ -2,8 +2,7 @@ const express = require('express');
 
 const Product = require('../models/product');
 const Category = require('../models/category');
-
-// const Sale = require('../models/sale');
+const Sale = require('../models/sale');
 
 const router = express.Router();
 
@@ -36,15 +35,6 @@ router.get('/listcategories/:categoryId', async (req, res) => {
     try {
         const category = await Category.findById(req.params.categoryId).populate('products');
         return res.send({ category });
-
-    } catch (err) {
-        console.log(err);
-        return res.status(400).send({ error: 'Consult of products failed' });
-
-    }'602182cc1aea94080169645c'
-    try {
-        const categories = await Category.find().populate('products');
-        return res.send({ categories });
 
     } catch (err) {
         console.log(err);
@@ -129,20 +119,41 @@ router.get('/listproducts', async (req, res) => {
     }
 });
 
+/**
+    Sales Routes
+ */
+
+router.post('/registersale', async (req, res) => {
+    const { product, quantity } = req.body;
+
+    try {
+        const sale = await Sale.create({ product, quantity });
+
+        await Sale.findByIdAndUpdate(sale, {
+            $push: {
+                products: product._id
+            }
+        })
+
+        return res.send({ sale });
+
+    } catch (err) {
+        console.log(err);
+        return res.status(400).send({ error: 'Register sale failed' });
+
+    }
+});
+
+router.get('/listsales', async (req, res) => {
+    try {
+        const sales = await Sale.find();
+        return res.send({ sales });
+
+    } catch (err) {
+        console.log(err);
+        return res.status(400).send({ error: 'Consult of sales failed' });
+
+    }
+});
+
 module.exports = app => app.use('/productmanagement', router);
-
-// router.post('/registersale/:id', async(req,res) => {
-
-//     try{
-//         const product = await Product.findOne({ 
-//                 where: {
-//                     id: req.params.id,
-//                 }  
-//             }
-//         )
-//     }
-//     catch{
-//         console.log(err);
-//         return res.status(400).send({error: 'Add product to sale products failed'});
-//     }
-// });

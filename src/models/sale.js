@@ -1,19 +1,20 @@
 const mongoose = require('../database');
 
 const SaleSchema = new mongoose.Schema({
-    produto:{
-        type: 'String',
-        unique:true,
-        required: true,
+    product: { 
+        type: mongoose.Schema.Types.ObjectId, 
+        ref: 'Product', 
+        required : true
     },
-    quantidade:{
+    quantity:{
         type: Number,
         required: true
     },
+    
     createdAt: {
         type: Date,
         default: Date.now,
-    }
+    },
 });
 
 const Sale = mongoose.model('Sale', SaleSchema);
