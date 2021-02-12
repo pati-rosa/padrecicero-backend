@@ -2,7 +2,7 @@ const Product = require('../../models/product');
 
 const listProduct = async (req, res) => {
     try {
-        const products = await Product.find();
+        const products = await Product.find().populate('category');
         return res.send({ products });
 
     } catch (err) {
