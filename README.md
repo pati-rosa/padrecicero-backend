@@ -1,6 +1,6 @@
 # Backend Padre Cícero
 
-## Sistema de gerenciamento de vendas do restaurante Padra Cícero.
+## Sistema de gerenciamento de vendas do restaurante Padre Cícero.
 
 ## Como executar
 ```bash
